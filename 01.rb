@@ -141,7 +141,12 @@ assert_eq(
 
 def crack_viginere(bytes)
   (2..40).map { |keysize|
-    [keysize, hamming_distance(bytes[0, keysize], bytes[keysize, keysize]).to_f / keysize]
+    [
+      keysize,
+      (0..4).each_cons(2).map { |a, b|
+        hamming_distance(bytes[a * keysize, keysize], bytes[b * keysize, keysize])
+      }.sum.to_f / keysize,
+    ]
   }.sort_by(&:last).each { |keysize, _|
     num_slices = (bytes.size.to_f / keysize).ceil
     # I'd use transpose, but that requires rectangle.
