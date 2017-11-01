@@ -1,4 +1,5 @@
 require 'base64'
+require 'openssl'
 
 def hex_to_bytes(s)
   s.chars.each_slice(2).map { |a| Integer(a.join, 16) }
@@ -169,3 +170,8 @@ assert_eq(
 )
 
 #puts xor_repeating(bytes, key).pack('c*')
+
+bytes = Base64.decode64(File.read('0107.txt'))
+cipher = OpenSSL::Cipher::AES.new(128, :ECB).decrypt
+cipher.key = 'YELLOW SUBMARINE'
+#puts cipher.update(bytes)
