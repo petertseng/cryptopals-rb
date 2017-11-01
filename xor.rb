@@ -53,8 +53,7 @@ def crack_single(bytes, must_be_printable: true)
       i,
       ENGLISH_FREQ.zip(?a..?z).map { |expect_freq, letter|
         got_freq = (freqs[letter]&.to_f &./ lower_english_only.size) || 0
-        # Inspired by least-squares regressions, take the square
-        (expect_freq - got_freq) ** 2
+        (expect_freq - got_freq).abs
       }.sum
     ]
   }
