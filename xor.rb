@@ -10,34 +10,36 @@ def xor_single(a, b)
   xor(a, [b] * a.size)
 end
 
-ENGLISH_FREQ = [
-  0.08167,
-  0.01492,
-  0.02782,
-  0.04253,
-  0.12702,
-  0.02228,
-  0.02015,
-  0.06094,
-  0.06966,
-  0.00153,
-  0.00772,
-  0.04025,
-  0.02406,
-  0.06749,
-  0.07507,
-  0.01929,
-  0.00095,
-  0.05987,
-  0.06327,
-  0.09056,
-  0.02758,
-  0.00978,
-  0.02361,
-  0.00150,
-  0.01974,
-  0.00074,
-].freeze
+# http://www.macfreek.nl/memory/Letter_Distribution
+ENGLISH_FREQ = {
+  ' ' => 0.18288462654132653,
+  ?e => 0.10266650371711405,
+  ?t => 0.07516998273511516,
+  ?a => 0.06532167023346977,
+  ?o => 0.06159577254159049,
+  ?n => 0.05712011128985469,
+  ?i => 0.05668443260048856,
+  ?s => 0.05317005343812784,
+  ?r => 0.04987908553231180,
+  ?h => 0.04978563962655234,
+  ?l => 0.03317547959533063,
+  ?d => 0.03282923097335889,
+  ?u => 0.02275795359120720,
+  ?c => 0.02233675963832357,
+  ?m => 0.02026567834113036,
+  ?f => 0.01983067155219636,
+  ?w => 0.01703893766467868,
+  ?g => 0.01624904409178952,
+  ?p => 0.01504324284647170,
+  ?y => 0.01427666624127353,
+  ?b => 0.01258880743014620,
+  ?v => 0.00796116438442061,
+  ?k => 0.00560962722644426,
+  ?x => 0.00140920161949961,
+  ?j => 0.00097521808184139,
+  ?q => 0.00083675498119895,
+  ?z => 0.00051284690692656,
+}
 
 def crack_single(bytes, must_be_printable: true)
   scores = (0...256).map { |i|
@@ -47,11 +49,11 @@ def crack_single(bytes, must_be_printable: true)
       c == 10 || (32..127).cover?(c)
     }
     str = candidate.pack('c*')
-    lower_english_only = str.downcase.each_char.select { |c| (?a..?z).cover?(c) }
+    lower_english_only = str.downcase.each_char.select { |c| c == ' ' || (?a..?z).cover?(c) }
     freqs = lower_english_only.group_by(&:itself).transform_values(&:size)
     [
       i,
-      ENGLISH_FREQ.zip(?a..?z).map { |expect_freq, letter|
+      ENGLISH_FREQ.map { |letter, expect_freq|
         got_freq = (freqs[letter]&.to_f &./ lower_english_only.size) || 0
         (expect_freq - got_freq).abs
       }.sum
