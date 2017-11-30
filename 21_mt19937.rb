@@ -2,8 +2,13 @@ require_relative 'assert'
 require_relative 'mt19937'
 
 # I have no idea whether these values are right though?
-# This is just whatever my code happened to output,
-# so this is only testing that I didn't change the behaviour
-# (whether that behaviour is right or wrong)
-r = MT19937.new(19)
-assert_eq([418903645, 1848846958, 3269542645, 1772717410, 1060590504], Array.new(5) { r.rand })
+# Uses test values from: https://github.com/cslarsen/mersenne-twister/blob/master/test-mt.cpp
+# So if my code is wrong, it is no more wrong than that code.
+r = MT19937.new(1)
+assert_eq(
+  [
+    1791095845, 4282876139, 3093770124, 4005303368, 491263, 550290313,
+    1298508491, 4290846341, 630311759, 1013994432, 396591248, 1703301249,
+  ],
+  Array.new(12) { r.rand },
+)
