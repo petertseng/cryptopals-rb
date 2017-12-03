@@ -6,12 +6,12 @@ end
 
 # https://gist.github.com/tstevens/925415/6dd06487a8fcd5c4c3c9c18ee32eb60e2917b815
 # FIPS 180-2 -- relevant section #'s below
-def sha1(message, hash_words = nil)
+def sha1(message, hash_words = nil, add_to_length = 0)
   hash_words ||= [0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0] # 5.3.1
 
   # 5.1.1
   # Big-endian u_int32 chunks
-  pad_string = mdpad(message, :big).unpack('N*')
+  pad_string = mdpad(message, :big, add_to_length).unpack('N*')
 
   # 6.1.2
   pad_string.each_slice(16).each do |chunk| # Split pad_string into 512b chunks (16 * 32b) -- 6.1.2 - 1. Prepare the message schedule

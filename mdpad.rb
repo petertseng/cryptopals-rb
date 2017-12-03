@@ -1,4 +1,4 @@
-def mdpad(message, endianness)
+def mdpad(message, endianness, add_to_length = 0)
   raise "Unknown endianness #{endianness}" unless %i(big little).include?(endianness)
 
   padded = message.bytes
@@ -15,7 +15,7 @@ def mdpad(message, endianness)
   raise "Padded to wrong length #{padded.length}" if padded.length % 64 != 56
 
   # Append length
-  length_bytes = bit_length.digits(256)
+  length_bytes = (add_to_length + bit_length).digits(256)
   length_bytes.concat([0] * (8 - length_bytes.size))
   length_bytes.reverse! if endianness == :big
   padded.concat(length_bytes)
