@@ -6,8 +6,8 @@ end
 
 # https://gist.github.com/tstevens/925415/6dd06487a8fcd5c4c3c9c18ee32eb60e2917b815
 # FIPS 180-2 -- relevant section #'s below
-def sha1(message)
-  hash_words = [0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0] # 5.3.1
+def sha1(message, hash_words = nil)
+  hash_words ||= [0x67452301, 0xEFCDAB89, 0x98BADCFE, 0x10325476, 0xC3D2E1F0] # 5.3.1
 
   # 5.1.1
   # Big-endian u_int32 chunks
