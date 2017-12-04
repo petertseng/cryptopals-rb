@@ -13,4 +13,4 @@ now = Time.now.to_i
 
 seeds = (0..1000).map { |n| now - n }.select { |s| MT19937.new(s).rand == v }
 
-assert_eq([seed], seeds)
+assert_eq(true, seeds.include?(seed), "#{seeds} should have #{seed}")
