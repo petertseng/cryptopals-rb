@@ -11,9 +11,12 @@ def gen(bit_size, verbose: false)
     puts m.to_s(16)
   end
 
+  two_b = 2 << (bit_size - 16)
+  three_b = 3 << (bit_size - 16)
+
   [mod_pow(m, e, n), e, n, ->(c) {
-    bytes = mod_pow(c, d, n).digits(256)
-    bytes.size == byte_size - 1 && bytes[-1] == 2
+    decrypted = mod_pow(c, d, n)
+    two_b <= decrypted && decrypted < three_b
   }, ->(check) { m == check }, ->(check) { assert_eq(m, check, 'Decrypt') }]
 end
 
